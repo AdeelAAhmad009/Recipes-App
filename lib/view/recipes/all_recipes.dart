@@ -27,7 +27,7 @@ class _AllRecipesState extends State<AllRecipes> {
                     onPressed: () {
                       Get.back();
                     },
-                    icon: Icon(Icons.arrow_back_outlined, size: 30, color: Colors.white)),
+                    icon: const Icon(Icons.arrow_back_outlined, size: 30, color: Colors.white)),
                 SizedBox(width: 10),
                 GradientText(
                   'ENJOY RECIPES',
