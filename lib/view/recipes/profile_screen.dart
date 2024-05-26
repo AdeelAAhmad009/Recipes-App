@@ -1,10 +1,10 @@
+import 'package:api_project/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
+  ProfileScreen({super.key});
+  final AuthController authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,13 +14,20 @@ class ProfileScreen extends StatelessWidget {
           Stack(
             children: [
               Container(
-                color: Colors.blueGrey,
                 height: MediaQuery.of(context).size.height * 0.45,
+                decoration: BoxDecoration(
+                    color: Colors.blueGrey,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(80),
+                    )),
                 child: Center(
                   child: Container(
                     padding: const EdgeInsets.all(5),
                     decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all()),
-                    child: const CircleAvatar(radius: 80),
+                    child: CircleAvatar(
+                      radius: 80,
+                      backgroundImage: NetworkImage(authController.profileModel!.image!),
+                    ),
                   ),
                 ),
               ),
@@ -39,8 +46,59 @@ class ProfileScreen extends StatelessWidget {
                       )),
                 ),
               ),
+              Positioned(
+                left: 20,
+                bottom: 20,
+                child: Text(
+                  "Name: ${authController.profileModel!.firstName} ${authController.profileModel!.lastName}",
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                ),
+              )
             ],
-          )
+          ),
+          SizedBox(height: 50),
+          Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blueGrey),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              "Email: ${authController.profileModel!.email}",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+          SizedBox(height: 15),
+          Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blueGrey),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              "User Name: ${authController.profileModel!.username}",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+          SizedBox(height: 15),
+          Container(
+            width: double.maxFinite,
+            padding: EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            margin: EdgeInsets.symmetric(horizontal: 15),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.blueGrey),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Text(
+              "Gender: ${authController.profileModel!.gender}",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+          SizedBox(height: 15),
         ],
       ),
     );

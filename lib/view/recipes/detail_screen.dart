@@ -1,9 +1,12 @@
+import 'package:api_project/controller/recipes_controller.dart';
+import 'package:api_project/models/recipes_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({super.key});
+  final Recipes? recipe;
+  const DetailScreen({super.key, this.recipe});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -25,11 +28,9 @@ class _DetailScreenState extends State<DetailScreen> {
                   width: double.maxFinite,
                   height: MediaQuery.of(context).size.height * 0.55,
                   child: ClipRRect(
-                      borderRadius: const BorderRadius.only(bottomRight: Radius.circular(70)),
-                      child: Image.asset(
-                        "assets/images/ff.jpg",
-                        fit: BoxFit.cover,
-                      )),
+                    borderRadius: const BorderRadius.only(bottomRight: Radius.circular(70)),
+                    child: Image.network(widget.recipe!.image!, fit: BoxFit.cover),
+                  ),
                 ),
                 //TODO BACK ARROW
                 Positioned(
@@ -70,15 +71,15 @@ class _DetailScreenState extends State<DetailScreen> {
                         ],
                       ),
                     ),
-                    child: const Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Name: Classic Margherita Pizza",
+                          "Name: ${widget.recipe!.name!}",
                           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                         Text(
-                          "Difficulty:",
+                          "Difficulty: ${widget.recipe!.difficulty!}",
                           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ],
@@ -96,14 +97,14 @@ class _DetailScreenState extends State<DetailScreen> {
                 children: [
                   SizedBox(height: 20),
                   //TODO Cuisine
-                  const Row(
+                  Row(
                     children: [
                       Text(
                         "Cuisine:",
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                       Text(
-                        " Italian",
+                        widget.recipe!.cuisine!,
                         style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ],
@@ -124,9 +125,9 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                         child: Column(children: [
                           Image.asset("assets/images/clock.png", height: 40, color: Colors.white),
-                          const Text(
+                          Text(
                             textAlign: TextAlign.center,
-                            "Prepare Time\n20 Minutes",
+                            "Prepare Time\n${widget.recipe!.prepTimeMinutes!} Minutes",
                             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ]),
@@ -142,9 +143,9 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                         child: Column(children: [
                           Image.asset("assets/images/clock1.png", height: 40, color: Colors.white),
-                          const Text(
+                          Text(
                             textAlign: TextAlign.center,
-                            "Cook Time\n20 Minutes",
+                            "Cook Time\n${widget.recipe!.cookTimeMinutes!} Minutes",
                             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ]),
@@ -160,9 +161,9 @@ class _DetailScreenState extends State<DetailScreen> {
                         ),
                         child: Column(children: [
                           Image.asset("assets/images/man.png", height: 40, color: Colors.white),
-                          const Text(
+                          Text(
                             textAlign: TextAlign.center,
-                            "Servings\n2",
+                            "Servings\n${widget.recipe!.servings!}",
                             style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ]),
@@ -171,8 +172,8 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   SizedBox(height: 10),
                   //TODO Calories Per Serving
-                  const Text(
-                    "Calories Per Serving: 300",
+                  Text(
+                    "Calories Per Serving: ${widget.recipe!.caloriesPerServing!.toString()}",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                   ),
                   SizedBox(height: 10), //TODO Ingredients
@@ -188,7 +189,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     ),
                     child: Column(
                       children: List.generate(
-                        5,
+                        widget.recipe!.ingredients!.length,
                         (index) => Row(
                           children: [
                             SizedBox(
@@ -199,11 +200,11 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                             ),
                             const SizedBox(width: 10),
-                            const SizedBox(
+                            SizedBox(
                               width: 300,
                               child: Text(
-                                "Fresh mozzarella cheese",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                                widget.recipe!.ingredients![index],
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                               ),
                             ),
                           ],
@@ -219,7 +220,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   ),
                   Column(
                     children: List.generate(
-                      5,
+                      widget.recipe!.ingredients!.length,
                       (index) => Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -231,10 +232,10 @@ class _DetailScreenState extends State<DetailScreen> {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          const SizedBox(
+                          SizedBox(
                             width: 300,
                             child: Text(
-                              "Bake in the preheated oven for 12-15 minutes or until the crust is golden brown.",
+                              widget.recipe!.ingredients![index],
                               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
@@ -252,15 +253,15 @@ class _DetailScreenState extends State<DetailScreen> {
                     spacing: 6,
                     runSpacing: 10,
                     children: List.generate(
-                      2,
+                      widget.recipe!.mealType!.length,
                       (index) => Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         decoration: BoxDecoration(
                           color: Colors.blueGrey,
                           borderRadius: BorderRadius.circular(1000),
                         ),
-                        child: const Text(
-                          "Dinner",
+                        child: Text(
+                          widget.recipe!.mealType![index],
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),
@@ -276,7 +277,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       const Spacer(),
                       RatingBar.builder(
                         itemSize: 25,
-                        initialRating: 3,
+                        initialRating: widget.recipe!.rating,
                         minRating: 1,
                         direction: Axis.horizontal,
                         allowHalfRating: true,
@@ -288,8 +289,8 @@ class _DetailScreenState extends State<DetailScreen> {
                         },
                       ),
                       const SizedBox(width: 10),
-                      const Text(
-                        "3.2",
+                      Text(
+                        widget.recipe!.rating.toString(),
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ],
@@ -300,15 +301,15 @@ class _DetailScreenState extends State<DetailScreen> {
                     spacing: 6,
                     runSpacing: 10,
                     children: List.generate(
-                      4,
+                      widget.recipe!.tags!.length,
                       (index) => Container(
                         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(1000),
                           border: Border.all(color: Colors.blueGrey),
                         ),
-                        child: const Text(
-                          "#Italian",
+                        child: Text(
+                          "#${widget.recipe!.tags![index]}",
                           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),
